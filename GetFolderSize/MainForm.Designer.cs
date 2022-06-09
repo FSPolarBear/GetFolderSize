@@ -60,6 +60,7 @@
             this.listView_data.TabIndex = 0;
             this.listView_data.UseCompatibleStateImageBehavior = false;
             this.listView_data.View = System.Windows.Forms.View.Details;
+            this.listView_data.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_data_ColumnClick);
             this.listView_data.SizeChanged += new System.EventHandler(this.listView_data_SizeChanged);
             this.listView_data.Click += new System.EventHandler(this.listView_data_Click);
             // 
