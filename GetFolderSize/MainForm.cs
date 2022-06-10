@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace GetFolderSize
 {
     /// <summary>
-    /// 查询文件夹中文件和子文件夹的大小，以大小的降序排列
-    /// <para>2022.6.9</para>
-    /// <para>version 1.1.0</para>
+    /// 查询文件夹中文件和子文件夹的大小，默认以大小的降序排列
+    /// <para>2022.6.10</para>
+    /// <para>version 1.2.0</para>
     /// </summary>
     public partial class MainForm : Form
     {
@@ -21,7 +22,7 @@ namespace GetFolderSize
         FolderOrFile? now; //当前显示的文件夹
 
         
-        Thread? thread_ok = null; //点击ok按钮时创建的线程。此变量为未被废弃线程，若某子线程t与此变量不一致则子线程t被废弃
+        Thread? thread = null; //点击ok按钮或确定导入时创建的线程。此变量为未被废弃线程，若某子线程t与此变量不一致则子线程t被废弃
 
         int sort_type = 4;//当前排序方法。0 名字升序；1 名字降序；2 文件夹优先； 3 文件优先；4 大小降序；5 大小升序；6 文件数降序；7 文件数升序
 
@@ -29,6 +30,7 @@ namespace GetFolderSize
         {
             InitializeComponent();
             root = new FolderOrFile();
+            root.IsFolder = true;
             root.Children = Array.Empty<FolderOrFile>();
             root.FullName = "";
             
@@ -54,62 +56,66 @@ namespace GetFolderSize
 
         /// <summary>
         /// 点击ok按钮，查找指定文件夹
-        /// <para>2022.6.9</para>
-        /// <para>version 1.1.0</para>
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button_ok_Click(object sender, EventArgs e)
         {
-            label_not_found.Text = "loading...";
+            //查找比较慢，使用线程可以防止程序卡死，提升用户体验
+            label_status.Text = "loading...";
 
             button_ok.Enabled = false; //查找期间不能再次按ok按钮
+            button_import.Enabled = false;//查找期间不能导入
 
-            if (thread_ok != null) //如果按下ok按钮时已有一个查找正在进行，则终止该查找，并创建一个新查找
-                try { thread_ok.Abort(); } catch (Exception) {  }    
-            thread_ok = new Thread(OkButtonThreadFunction);
-            thread_ok.IsBackground = true;//子线程会随着主线程的退出而退出
-            thread_ok.Start(textBox_path.Text);
+            if (thread != null) //如果按下ok按钮时已有一个查找正在进行，则终止该查找，并创建一个新查找
+                try { thread.Abort(); } catch (Exception) {  }    
+            thread = new Thread(OkButtonThreadFunction);
+            thread.IsBackground = true;//子线程会随着主线程的退出而退出
+            thread.Start(textBox_path.Text);
             
         }
 
 
         /// <summary>
-        /// 查找文件夹成功，invoke主线程更新界面
-        /// <para>2022.6.8</para>
-        /// <para>version 1.0.0</para>
+        /// 查找或导入文件夹成功，invoke主线程更新界面
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
         /// </summary>
-        /// <param name="f">查找到的文件夹</param>
+        /// <param name="f">查找到或导入的文件夹</param>
         private void UpdateFormInvokeFunction(FolderOrFile f)
         {
             if(InvokeRequired == false)//主线程则直接操作窗体
             {
                 button_ok.Enabled = true; //查询结束后ok按钮恢复可用
+                button_import.Enabled = true;
                 root.Children = new FolderOrFile[] { f };
                 f.Parent = root;
                 UpdateForm(root);
-                label_not_found.Text = "";
+                label_status.Text = "";
                 UpdateForm(f);
             }
             else//子线程则调用主线程
             {
-                if (thread_ok != null && System.Threading.Thread.CurrentThread.ManagedThreadId == thread_ok.ManagedThreadId) //如果该进程未被废弃则调用主线程操作窗体
+                if (thread != null && System.Threading.Thread.CurrentThread.ManagedThreadId == thread.ManagedThreadId) //如果该进程未被废弃则调用主线程操作窗体
                     this.Invoke(UpdateFormInvokeFunction, f);
             }
         }
 
         /// <summary>
-        /// 查找文件夹失败，invoke主线程更新界面
-        /// <para>2022.6.9</para>
-        /// <para>version 1.1.0</para>
+        /// 查找或导入文件夹失败，invoke主线程更新界面
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
         /// </summary>
-        /// <param name="message">失败消息。一般为"folder not found"</param>
+        /// <param name="message">失败消息。查询失败为"folder not found"，导入失败为"import failed"</param>
         private void FolderNotFoundInvokeFunction(string message)
         {
             if(InvokeRequired == false)//主线程则直接操作窗体
             {
                 button_ok.Enabled = true; //查询结束后ok按钮恢复可用
-                label_not_found.Text = message;
+                button_import.Enabled = true;
+                label_status.Text = message;
                 root.Children = Array.Empty<FolderOrFile>();
                 listView_data.Items.Clear();
                 now = null;
@@ -117,7 +123,7 @@ namespace GetFolderSize
             }
             else//子线程则调用主线程
             {
-                if (thread_ok != null && System.Threading.Thread.CurrentThread.ManagedThreadId == thread_ok.ManagedThreadId) //如果该进程未被废弃则调用主线程操作窗体
+                if (thread != null && System.Threading.Thread.CurrentThread.ManagedThreadId == thread.ManagedThreadId) //如果该进程未被废弃则调用主线程操作窗体
                     this.Invoke(FolderNotFoundInvokeFunction, message);      
             }
         }
@@ -323,5 +329,102 @@ namespace GetFolderSize
             }
         }
 
+        /// <summary>
+        /// 将当前查询的内容导出至json文件
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_export_Click(object sender, EventArgs e)
+        {
+            if(root.Children!= null && root.Children.Length > 0)//只有在有查询内容时才可以导出
+            {
+                try
+                {
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.Filter = "json files(*.json)|*.json|All files (*.*)|*.*";
+                    sfd.DefaultExt = ".json";
+
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        string filename = sfd.FileName;
+
+                        //如果自定义过排序，将存储的内容恢复为默认的排序，但不影响当前显示
+                        int now_sort_type = sort_type;
+                        RestoreSortType();
+                        sort_type = now_sort_type;
+
+                        string json = root.Children[0].ToString();
+                        File.WriteAllText(filename, json);
+                    }
+                    label_status.Text = "export succeed";
+
+                }catch(Exception)
+                {
+                    label_status.Text = "export failed";
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// 从json文件中导入查询内容
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_import_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "json files(*.json)|*.json|All files (*.*)|*.*";
+                if(ofd.ShowDialog() == DialogResult.OK)
+                {
+                    string filename = ofd.FileName;
+
+                    //将字符串转化为对象一步比较慢，使用线程可以防止程序卡死，提升用户体验
+                    label_status.Text = "loading...";
+                    string json = File.ReadAllText(filename);
+                    button_ok.Enabled = false; //导入期间不能按ok按钮
+                    button_import.Enabled = false;//导入期间不能再次导入
+
+                    if (thread != null) //如果确定导入时已有一个查找或导入正在进行，则终止之，并进行导入
+                        try { thread.Abort(); } catch (Exception) { }
+                    thread = new Thread(ImportButtonThreadFunction);
+                    thread.IsBackground = true;//子线程会随着主线程的退出而退出
+                    thread.Start(json);
+                }
+            }
+            catch(Exception)
+            {
+                FolderNotFoundInvokeFunction("import failed");
+            }
+        }
+
+        /// <summary>
+        /// import按钮创建的线程执行的函数
+        /// <para>2022.6.10</para>
+        /// <para>version 1.2.0</para>
+        /// </summary>
+        /// <param name="path">路径文本框中的内容</param>
+        private void ImportButtonThreadFunction(object json)
+        {
+            try//若导入成功则显示在界面上
+            {
+                FolderOrFile? f = FolderOrFile.FromJson(json.ToString());
+                if (f == null)
+                    throw new Exception("import failed");
+                UpdateFormInvokeFunction(f);
+            }
+            catch (Exception ex)
+            {
+                FolderNotFoundInvokeFunction(ex.Message);
+            }
+
+        }
     }
 }

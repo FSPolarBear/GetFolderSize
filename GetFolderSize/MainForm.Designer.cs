@@ -36,10 +36,12 @@
             this.label_path = new System.Windows.Forms.Label();
             this.textBox_path = new System.Windows.Forms.TextBox();
             this.button_ok = new System.Windows.Forms.Button();
-            this.label_not_found = new System.Windows.Forms.Label();
+            this.label_status = new System.Windows.Forms.Label();
             this.button_root = new System.Windows.Forms.Button();
             this.button_back = new System.Windows.Forms.Button();
             this.label_now_path = new System.Windows.Forms.Label();
+            this.button_export = new System.Windows.Forms.Button();
+            this.button_import = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView_data
@@ -53,7 +55,7 @@
             this.columnHeader_size,
             this.columnHeader_file_count});
             this.listView_data.FullRowSelect = true;
-            this.listView_data.Location = new System.Drawing.Point(42, 121);
+            this.listView_data.Location = new System.Drawing.Point(42, 129);
             this.listView_data.MultiSelect = false;
             this.listView_data.Name = "listView_data";
             this.listView_data.Size = new System.Drawing.Size(700, 400);
@@ -87,7 +89,7 @@
             // label_path
             // 
             this.label_path.AutoSize = true;
-            this.label_path.Location = new System.Drawing.Point(40, 51);
+            this.label_path.Location = new System.Drawing.Point(40, 24);
             this.label_path.Name = "label_path";
             this.label_path.Size = new System.Drawing.Size(45, 20);
             this.label_path.TabIndex = 1;
@@ -95,14 +97,14 @@
             // 
             // textBox_path
             // 
-            this.textBox_path.Location = new System.Drawing.Point(91, 48);
+            this.textBox_path.Location = new System.Drawing.Point(91, 21);
             this.textBox_path.Name = "textBox_path";
             this.textBox_path.Size = new System.Drawing.Size(335, 27);
             this.textBox_path.TabIndex = 2;
             // 
             // button_ok
             // 
-            this.button_ok.Location = new System.Drawing.Point(432, 47);
+            this.button_ok.Location = new System.Drawing.Point(432, 20);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(100, 29);
             this.button_ok.TabIndex = 3;
@@ -110,17 +112,17 @@
             this.button_ok.UseVisualStyleBackColor = true;
             this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
             // 
-            // label_not_found
+            // label_status
             // 
-            this.label_not_found.AutoSize = true;
-            this.label_not_found.Location = new System.Drawing.Point(538, 51);
-            this.label_not_found.Name = "label_not_found";
-            this.label_not_found.Size = new System.Drawing.Size(0, 20);
-            this.label_not_found.TabIndex = 4;
+            this.label_status.AutoSize = true;
+            this.label_status.Location = new System.Drawing.Point(538, 24);
+            this.label_status.Name = "label_status";
+            this.label_status.Size = new System.Drawing.Size(0, 20);
+            this.label_status.TabIndex = 4;
             // 
             // button_root
             // 
-            this.button_root.Location = new System.Drawing.Point(40, 86);
+            this.button_root.Location = new System.Drawing.Point(40, 59);
             this.button_root.Name = "button_root";
             this.button_root.Size = new System.Drawing.Size(94, 29);
             this.button_root.TabIndex = 5;
@@ -130,7 +132,7 @@
             // 
             // button_back
             // 
-            this.button_back.Location = new System.Drawing.Point(140, 86);
+            this.button_back.Location = new System.Drawing.Point(140, 59);
             this.button_back.Name = "button_back";
             this.button_back.Size = new System.Drawing.Size(94, 29);
             this.button_back.TabIndex = 6;
@@ -141,20 +143,42 @@
             // label_now_path
             // 
             this.label_now_path.AutoSize = true;
-            this.label_now_path.Location = new System.Drawing.Point(240, 90);
+            this.label_now_path.Location = new System.Drawing.Point(42, 98);
             this.label_now_path.Name = "label_now_path";
             this.label_now_path.Size = new System.Drawing.Size(0, 20);
             this.label_now_path.TabIndex = 7;
+            // 
+            // button_export
+            // 
+            this.button_export.Location = new System.Drawing.Point(240, 59);
+            this.button_export.Name = "button_export";
+            this.button_export.Size = new System.Drawing.Size(94, 29);
+            this.button_export.TabIndex = 8;
+            this.button_export.Text = "export";
+            this.button_export.UseVisualStyleBackColor = true;
+            this.button_export.Click += new System.EventHandler(this.button_export_Click);
+            // 
+            // button_import
+            // 
+            this.button_import.Location = new System.Drawing.Point(338, 59);
+            this.button_import.Name = "button_import";
+            this.button_import.Size = new System.Drawing.Size(94, 29);
+            this.button_import.TabIndex = 9;
+            this.button_import.Text = "import";
+            this.button_import.UseVisualStyleBackColor = true;
+            this.button_import.Click += new System.EventHandler(this.button_import_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 553);
+            this.Controls.Add(this.button_import);
+            this.Controls.Add(this.button_export);
             this.Controls.Add(this.label_now_path);
             this.Controls.Add(this.button_back);
             this.Controls.Add(this.button_root);
-            this.Controls.Add(this.label_not_found);
+            this.Controls.Add(this.label_status);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.label_path);
             this.Controls.Add(this.listView_data);
@@ -176,9 +200,11 @@
         private Label label_path;
         private TextBox textBox_path;
         private Button button_ok;
-        private Label label_not_found;
+        private Label label_status;
         private Button button_root;
         private Button button_back;
         private Label label_now_path;
+        private Button button_export;
+        private Button button_import;
     }
 }
