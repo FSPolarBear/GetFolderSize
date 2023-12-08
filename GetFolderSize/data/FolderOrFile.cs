@@ -9,8 +9,8 @@ namespace GetFolderSize
 
     /// <summary>
     /// 文件夹或文件。数据项，用于在列表中展示
-    /// <para>2022.6.10</para>
-    /// <para>version 1.2.0</para>
+    /// <para>2023.12.7</para>
+    /// <para>version 1.3.0</para>
     /// </summary>
     public class FolderOrFile : IComparable<FolderOrFile>
     {
@@ -264,6 +264,98 @@ namespace GetFolderSize
             }
         }
 
+        /// <summary>
+        /// 检验文件名或文件夹名是否与搜索内容匹配
+        /// <para>2023.12.7</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="name">文件名（或文件夹名）</param>
+        /// <param name="str">搜索内容</param>
+        /// <param name="searchRule">匹配方式。include：文件名包含搜索内容；same：文件名与搜索内容相同；regular：搜索内容为正则表达式，文件名匹配此正则表达式</param>
+        /// <returns>若文件名匹配搜索内容则返回true，否则返回false</returns>
+        private static bool _Match(string name, string str, string searchRule = "include")
+        {
+            switch (searchRule)
+            {
+                case "include":
+                    return name.Contains(str);
+                    break;
+                case "same":
+                    return name == str;
+                    break;
+                case "regular":
+                    System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(str);
+                    System.Text.RegularExpressions.Match match = reg.Match(name);
+                    return match.Success;
+                    break;
+                default:
+                    throw new Exception("Search Rule Exception");
+
+            }
+        }
+
+
+        /// <summary>
+        /// 搜索此文件夹下名字匹配的文件或文件夹，并返回查找到的内容列表。用于递归
+        /// <para>2023.12.7</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="str">搜索内容</param>
+        /// <param name="searchRule">匹配方式。include：文件名包含搜索内容；same：文件名与搜索内容相同；regular：搜索内容为正则表达式，文件名匹配此正则表达式</param>
+        /// <param name="searchFile">是否搜索文件</param>
+        /// <param name="searchFolder">是否搜索文件夹</param>
+        /// <param name="recursiveSearch">是否递归搜索。若为true，则在此文件夹及其子文件夹进行递归搜索；若为false，则仅在此文件夹搜索，不在子文件夹搜索</param>
+        /// <returns>查找到的内容列表</returns>
+        private List<FolderOrFile> _Search(string str, string searchRule = "include", bool searchFile = true, bool searchFolder = true, bool recursiveSearch = false)
+        {
+            if (!this.IsFolder || this.Children == null)  // 仅对文件夹进行搜索。如果是文件则报错
+                throw new Exception("Search in a non-folder object.");
+
+            List<FolderOrFile> result = new List<FolderOrFile> ();
+
+            for(int i=0;i<this.Children.Length;i++)
+            {
+                FolderOrFile child = this.Children[i];
+                if ((searchFile && !child.IsFolder) || (searchFolder && child.IsFolder))
+                {
+                    if (_Match(child.Name, str, searchRule))  // 如果匹配则加入结果中
+                    {
+                        result.Add(child);
+                    }
+                }
+
+                if (recursiveSearch && child.IsFolder)  // 递归查询
+                {
+                    result.AddRange(child._Search(str, searchRule, searchFile, searchFolder, recursiveSearch));
+                }
+            }
+            return result;
+
+        }
+
+        /// <summary>
+        /// 搜索此文件夹下名字匹配的文件或文件夹，并返回一个包含查找内容的文件夹对象
+        /// <para>2023.12.7</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="str">搜索内容</param>
+        /// <param name="searchRule">匹配方式。include：文件名包含搜索内容；same：文件名与搜索内容相同；regular：搜索内容为正则表达式，文件名匹配此正则表达式</param>
+        /// <param name="searchFile">是否搜索文件</param>
+        /// <param name="searchFolder">是否搜索文件夹</param>
+        /// <param name="recursiveSearch">是否递归搜索。若为true，则在此文件夹及其子文件夹进行递归搜索；若为false，则仅在此文件夹搜索，不在子文件夹搜索</param>
+        /// <returns>包含查找内容的文件夹对象</returns>
+        public FolderOrFile Search(string str, string searchRule="include", bool searchFile=true, bool searchFolder = true, bool recursiveSearch=false)
+        {
+            if (!this.IsFolder || this.Children == null)  // 仅对文件夹进行搜索。如果是文件则报错
+                throw new Exception("Search in a non-folder object.");
+            FolderOrFile result = new FolderOrFile();
+            result.IsFolder = true;
+            result.Name = "Search result";
+            result.Children = _Search(str, searchRule, searchFile, searchFolder, recursiveSearch).ToArray();
+            result.FileCount = result.Children.Length;
+            Array.Sort<FolderOrFile>(result.Children);  // 对搜索的结果按大小进行排序
+            return result;
+        }
 
     }
 }

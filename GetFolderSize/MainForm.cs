@@ -13,8 +13,8 @@ namespace GetFolderSize
 {
     /// <summary>
     /// 查询文件夹中文件和子文件夹的大小，默认以大小的降序排列
-    /// <para>2022.6.10</para>
-    /// <para>version 1.2.0</para>
+    /// <para>2023.12.7</para>
+    /// <para>version 1.3.0</para>
     /// </summary>
     public partial class MainForm : Form
     {
@@ -26,6 +26,8 @@ namespace GetFolderSize
 
         int sort_type = 4;//当前排序方法。0 名字升序；1 名字降序；2 文件夹优先； 3 文件优先；4 大小降序；5 大小升序；6 文件数降序；7 文件数升序
 
+        static readonly string[] SEARCH_RULES = { "include", "same", "regular" };
+
         public MainForm()
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace GetFolderSize
             root.IsFolder = true;
             root.Children = Array.Empty<FolderOrFile>();
             root.FullName = "";
-            
+            comboBox_search_rule.SelectedIndex = 0;
         }
 
 
@@ -425,6 +427,96 @@ namespace GetFolderSize
                 FolderNotFoundInvokeFunction(ex.Message);
             }
 
+        }
+
+        /// <summary>
+        /// 在资源管理器中打开当前文件夹。若选中了文件或文件夹，则在资源管理器中指向被选中的文件或文件夹
+        /// <para>2023.12.7</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_show_in_explorer_Click(object sender, EventArgs e)
+        {
+            // 若当前未显示文件，则什么都不做
+            if (now == null || now.Children == null || now.Children.Length == 0) 
+                return;
+
+            string? path;  // 选中的文件或文件夹。未选中文件或文件夹时为null
+            if (listView_data.SelectedItems.Count > 0)
+            {
+                path = now.Children[listView_data.SelectedItems[0].Index].FullName;
+            }
+            else
+            {
+                path = null;
+            }
+
+            if (path != null)  // 打开资源管理器指向选中的文件或文件夹
+            {
+                System.Diagnostics.Process.Start("explorer", "/select,\"" + path + "\"");
+            }
+            else if (Directory.Exists(now.FullName))  // 在资源管理器中打开当前文件夹
+            {
+                System.Diagnostics.Process.Start("explorer", now.FullName);
+            }
+            
+        }
+
+        /// <summary>
+        /// 查找当前文件夹下符合条件的文件或文件夹
+        /// <para>2023.12.8</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_search_Click(object sender, EventArgs e)
+        {
+            // 若当前未显示文件，则什么都不做
+            if (now == null || now.Children == null || now.Children.Length == 0)
+                return;
+            //public FolderOrFile Search(string str, string searchRule="include", bool searchFile=true, bool searchFolder = true, bool recursiveSearch=false)
+            string str = textBox_search.Text;
+            string searchRule = SEARCH_RULES[comboBox_search_rule.SelectedIndex];
+            bool searchFile = checkBox_search_file.Checked;
+            bool searchFolder = checkBox_search_folder.Checked;
+            bool recursiveSearch = checkBox_recursive_search.Checked;
+            if (string.IsNullOrEmpty(str))
+            {
+                label_status.Text = "search text is empty";
+                return;
+            }
+            if (!searchFile && !searchFolder)
+            {
+                label_status.Text = "nothing for search";
+                return;
+            }
+
+            FolderOrFile found = now.Search(str, searchRule, searchFile, searchFolder, recursiveSearch);
+            RestoreSortType();  // 切换显示对象前重置排序
+            UpdateForm(found);
+
+
+
+        }
+
+        /// <summary>
+        /// 将鼠标放在文件或文件夹上时，显示完整路径
+        /// <para>2023.12.8</para>
+        /// <para>version 1.3.0</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void listView_data_ItemMouseHover(object sender, ListViewItemMouseHoverEventArgs e)
+        {
+            try
+            {
+                ToolTip toolTip = new ToolTip();
+                string fullName = now.Children[e.Item.Index].FullName;
+                toolTip.ShowAlways = true;
+                toolTip.SetToolTip(e.Item.ListView, fullName);
+            }
+            catch (Exception) { }
         }
     }
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetFolderSize", "GetFolderSize\GetFolderSize.csproj", "{B270F330-F8AB-451D-98E6-FF35E9D4ABF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetFolderSize", "GetFolderSize\GetFolderSize.csproj", "{B270F330-F8AB-451D-98E6-FF35E9D4ABF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetFolderSizeTest", "GetFolderSizeTest\GetFolderSizeTest.csproj", "{E79D0901-9CF2-40D5-A4C6-D7C7AD3CFC45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B270F330-F8AB-451D-98E6-FF35E9D4ABF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B270F330-F8AB-451D-98E6-FF35E9D4ABF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B270F330-F8AB-451D-98E6-FF35E9D4ABF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79D0901-9CF2-40D5-A4C6-D7C7AD3CFC45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79D0901-9CF2-40D5-A4C6-D7C7AD3CFC45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79D0901-9CF2-40D5-A4C6-D7C7AD3CFC45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79D0901-9CF2-40D5-A4C6-D7C7AD3CFC45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
