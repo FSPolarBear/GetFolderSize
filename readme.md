@@ -2,14 +2,14 @@
 Get the size of files and subfolders in a folder. The files and folders are sorted in descending order by file size by default.
 
 ## Version
-v1.3.0
+v1.3.1
 
 ## Environmental Requirements
 Windows7/10/11, .NET 6.0
 
 ## How to use
 Input the path in "Path" text box, and then click "ok" button to start getting.<br>
-It is unable to click "ok" and "import" buttons during get or import.<br>
+It is unable to click "ok", "import" and "search" buttons during get, import or search.<br>
 Click the folder item to enter the folder.<br>
 Click "back" button to return to the parent folder.<br>
 Click "root" button to return to the root folder.<br>
@@ -17,6 +17,7 @@ The files and folders are sorted in descending order by file size by default. If
 Click "export" button to export the data into a json file.<br>
 Click "import" button to import data from a json file.<br>
 Click "show in explorer" button to open the shown folder in explorer. If you choose a file or folder, it will be selected in the explorer.<br>
+Click "refresh" button to reload the shown folder.<br>
 Input the name for search in "Search" text box, and then click "search" button to search the files and folders that match the requirement.
 The search rule "include" will find files and folders whose name include the inputted text.
 The search rule "same" will find files and folders whose name is the same as the inputted text.
@@ -24,12 +25,17 @@ The search rule "regular" will find files and folders whose name matches the inp
 If "search files" check box is checked, the search results include files.<br>
 If "search folders" check box is checked, the search results include folders.<br>
 If "recursive search" check box is checked, the search will be conducted recursively in the current folder and its subfolders. Otherwise, the search will be conducted only in the current folder.<br>
+If the "batch load" check box is checked, the items will be loaded in batches when a large number of items are displayed, which will result in a longer time to load all the items. Otherwise, a large number of items may cause the program to become unresponsive during loading.<br>
 If you want to return to all gotten files and folders, please click "root" button.<br>
 Put the mouse over a file or folder to show the full path of it.
 
 ## Alert
-### loading
-It is getting or importing. Please wait.
+### getting
+It is getting. Please wait.
+### importing
+It is importing. Please wait.
+### searching
+It is searching. Please wait.
 ### folder not found
 The folder is not found.
 ### export succeed
@@ -46,9 +52,16 @@ Both "search files" and "search folders" check boxes are not checked. Please che
 
 
 ## Update log
+2023.12.13<br>
+v1.3.1<br>
+We added the function of batch loading, in order to solve the problem that the problem may become unresponsive during loading a large number of items.<br>
+We added the function of refreshing.<br>
+We updated the alert text.<br>
+
+
 2023.12.8<br>
 v1.3.0<br>
-We added the function of search.<br>
+We added the function of searching.<br>
 We added the function of opening the current folder in explorer and select the chosen file or folder.<br>
 We added the function of showing the full path when putting the mouse on a file or folder.<br>
 We fixed some typographic and descriptive problems of readme.md.<br>
@@ -57,7 +70,7 @@ We removed compiled files from the source code.<br>
 
 2022.6.10<br>
 v1.2.0<br>
-We added the functions of import and export.<br>
+We added the functions of importing and exporting.<br>
 We optimized the UI.<br>
 
 2022.6.9<br>

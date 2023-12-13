@@ -9,8 +9,8 @@ namespace GetFolderSize
 
     /// <summary>
     /// 文件夹或文件。数据项，用于在列表中展示
-    /// <para>2023.12.7</para>
-    /// <para>version 1.3.0</para>
+    /// <para>2023.12.12</para>
+    /// <para>version 1.3.1</para>
     /// </summary>
     public class FolderOrFile : IComparable<FolderOrFile>
     {
@@ -354,8 +354,34 @@ namespace GetFolderSize
             result.Children = _Search(str, searchRule, searchFile, searchFolder, recursiveSearch).ToArray();
             result.FileCount = result.Children.Length;
             Array.Sort<FolderOrFile>(result.Children);  // 对搜索的结果按大小进行排序
+
+            //添加一个父节点，以显示查找到的文件总数
+            FolderOrFile root = new FolderOrFile();
+            root.Children = new FolderOrFile[] {result};
+            result.Parent = root;
             return result;
         }
+
+        /// <summary>
+        /// 搜索此文件夹下名字匹配的文件或文件夹，并返回一个包含查找内容的文件夹对象
+        /// <para>2023.12.11</para>
+        /// <para>version 1.3.1</para>
+        /// </summary>
+        /// <param name="json">包含搜索内容和搜索配置的json字符串</param>
+        /// <returns></returns>
+        public FolderOrFile Search(string json)
+        {
+            JObject jobj = JObject.Parse(json);
+            string str = JsonUtil.GetValue<string>(jobj, "str", "");
+            string searchRule = JsonUtil.GetValue<string>(jobj, "searchRule", "include");
+            bool searchFile = JsonUtil.GetValue<bool>(jobj, "searchFile", true);
+            bool searchFolder = JsonUtil.GetValue<bool>(jobj, "searchFolder", true);
+            bool recursiveSearch = JsonUtil.GetValue<bool>(jobj, "recursiveSearch", false);
+            return Search(str, searchRule, searchFile, searchFolder, recursiveSearch);
+
+        }
+
+
 
     }
 }

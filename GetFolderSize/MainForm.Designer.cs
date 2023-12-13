@@ -51,6 +51,8 @@
             this.comboBox_search_rule = new System.Windows.Forms.ComboBox();
             this.label_search_rule = new System.Windows.Forms.Label();
             this.checkBox_recursive_search = new System.Windows.Forms.CheckBox();
+            this.button_refresh = new System.Windows.Forms.Button();
+            this.checkBox_batch_load = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // listView_data
@@ -272,11 +274,35 @@
             this.checkBox_recursive_search.Text = "recursive search";
             this.checkBox_recursive_search.UseVisualStyleBackColor = true;
             // 
+            // button_refresh
+            // 
+            this.button_refresh.Location = new System.Drawing.Point(582, 107);
+            this.button_refresh.Name = "button_refresh";
+            this.button_refresh.Size = new System.Drawing.Size(94, 29);
+            this.button_refresh.TabIndex = 19;
+            this.button_refresh.Text = "refresh";
+            this.button_refresh.UseVisualStyleBackColor = true;
+            this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
+            // 
+            // checkBox_batch_load
+            // 
+            this.checkBox_batch_load.AutoSize = true;
+            this.checkBox_batch_load.Checked = true;
+            this.checkBox_batch_load.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_batch_load.Location = new System.Drawing.Point(450, 81);
+            this.checkBox_batch_load.Name = "checkBox_batch_load";
+            this.checkBox_batch_load.Size = new System.Drawing.Size(108, 24);
+            this.checkBox_batch_load.TabIndex = 20;
+            this.checkBox_batch_load.Text = "batch load";
+            this.checkBox_batch_load.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 603);
+            this.Controls.Add(this.checkBox_batch_load);
+            this.Controls.Add(this.button_refresh);
             this.Controls.Add(this.checkBox_recursive_search);
             this.Controls.Add(this.label_search_rule);
             this.Controls.Add(this.comboBox_search_rule);
@@ -328,5 +354,7 @@
         private ComboBox comboBox_search_rule;
         private Label label_search_rule;
         private CheckBox checkBox_recursive_search;
+        private Button button_refresh;
+        private CheckBox checkBox_batch_load;
     }
 }

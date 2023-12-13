@@ -1,5 +1,7 @@
 
 using GetFolderSize;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace GetFolderSizeTest
 {
@@ -12,7 +14,7 @@ namespace GetFolderSizeTest
     public class FolderOrFileTest
     {
         /// <summary>
-        /// 测试FolderOrFile类的Search函数
+        /// 测试FolderOrFile类的Search方法
         /// Search: 搜索此文件夹下名字匹配的文件或文件夹，并返回一个包含查找内容的文件夹对象
         /// <para>2023.12.8</para>
         /// <para>version 1.3.0</para>
@@ -64,5 +66,6 @@ namespace GetFolderSizeTest
             Assert.AreEqual(3, sr11.FileCount);
 
         }
+
     }
 }
