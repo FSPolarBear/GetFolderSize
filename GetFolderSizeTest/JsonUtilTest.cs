@@ -15,8 +15,8 @@ namespace GetFolderSizeTest
     {
         /// <summary>
         /// 测试JsonUtil类
-        /// <para>2023.12.12</para>
-        /// <para>version 1.3.1</para>
+        /// <para>2023.12.19</para>
+        /// <para>version 1.4.0</para>
         /// </summary>
         [TestClass]
         public class JsonUtilTest
@@ -101,6 +101,73 @@ namespace GetFolderSizeTest
                 string res10 = (string)method_string.Invoke(null, para10);
                 Assert.AreEqual("default_value", res10);
                 Console.WriteLine(res10);
+
+            }
+
+
+            /// <summary>
+            /// 测试JsonUtil类的GetInt、GetDouble、GetString、GetBoolen、GetJObject、GetJArray方法
+            /// <para>2023.12.19</para>
+            /// <para>version 1.4.0</para>
+            /// </summary>
+            [TestMethod]
+            public void TestGet()
+            {
+                JObject jobj = new JObject();
+
+                jobj["key1"] = "1234567";
+                jobj["key2"] = true;
+                jobj["key3"] = 1234;
+                jobj["key4"] = new JArray() { 1, 2, 3, 4 };
+                jobj["key5"] = new JObject() { { "abc", 123 }, { "efg", true }, { "hig", "asdf" } };
+                jobj["key6"] = 123.4567;
+                jobj["key7"] = 5000000000L;
+
+                int? res1 = JsonUtil.GetInt(jobj, "key3"); //测试GetInt
+                Assert.AreEqual(1234, res1);
+
+                int? res2 = JsonUtil.GetInt(jobj, "key2"); 
+                Assert.IsNull(res2);
+
+                double? res3 = JsonUtil.GetDouble(jobj, "key6"); //测试GetDouble
+                Assert.AreEqual(123.4567, res3.Value, 1e-7);
+
+                double? res4 = JsonUtil.GetDouble(jobj, "key3");
+                Assert.IsNull(res4);
+
+                double? res5 = JsonUtil.GetDouble(jobj, "any_key", 0.321);
+                Assert.AreEqual(0.321, res5.Value, 1e-7);
+
+                bool? res6 = JsonUtil.GetBool(jobj, "key2"); //测试GetBool
+                Assert.IsTrue(res6);
+
+                bool? res7 = JsonUtil.GetBool(jobj, "key1");
+                Assert.IsNull(res7);
+
+                string? res8 = JsonUtil.GetString(jobj, "key1"); //测试GetString
+                Assert.AreEqual("1234567", res8);
+
+                string? res9 = JsonUtil.GetString(jobj, "key6");
+                Assert.IsNull(res9);
+
+                JObject? res10 = JsonUtil.GetJObject(jobj, "key5"); //测试GetJObject
+                Assert.AreEqual(new JObject() { { "abc", 123 }, { "efg", true }, { "hig", "asdf" } }.ToString(), res10.ToString());
+
+                JObject? res11 = JsonUtil.GetJObject(jobj, "key1");
+                Assert.IsNull (res11);
+
+                JArray? res12 = JsonUtil.GetJArray(jobj, "key4"); //测试GetJArray
+                Assert.AreEqual(new JArray() { 1, 2, 3, 4 }.ToString(), res12.ToString());
+
+                JArray? res13 = JsonUtil.GetJArray(jobj, "key1");
+                Assert.IsNull(res13);
+
+                long? res14 = JsonUtil.GetLong(jobj, "key7", null); //测试GetLong
+                Assert.AreEqual(5000000000L, res14);
+
+                long? res15 = JsonUtil.GetLong(jobj, "key1", null);
+                Assert.IsNull(res15);
+
 
             }
         }

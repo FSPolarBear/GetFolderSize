@@ -33,10 +33,11 @@
             this.columnHeader_type = new System.Windows.Forms.ColumnHeader();
             this.columnHeader_size = new System.Windows.Forms.ColumnHeader();
             this.columnHeader_file_count = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader_last_write_time = new System.Windows.Forms.ColumnHeader();
             this.label_path = new System.Windows.Forms.Label();
             this.textBox_path = new System.Windows.Forms.TextBox();
             this.button_ok = new System.Windows.Forms.Button();
-            this.label_status = new System.Windows.Forms.Label();
+            this.label_alert = new System.Windows.Forms.Label();
             this.button_root = new System.Windows.Forms.Button();
             this.button_back = new System.Windows.Forms.Button();
             this.label_now_path = new System.Windows.Forms.Label();
@@ -46,13 +47,8 @@
             this.button_search = new System.Windows.Forms.Button();
             this.label_search = new System.Windows.Forms.Label();
             this.textBox_search = new System.Windows.Forms.TextBox();
-            this.checkBox_search_file = new System.Windows.Forms.CheckBox();
-            this.checkBox_search_folder = new System.Windows.Forms.CheckBox();
-            this.comboBox_search_rule = new System.Windows.Forms.ComboBox();
-            this.label_search_rule = new System.Windows.Forms.Label();
-            this.checkBox_recursive_search = new System.Windows.Forms.CheckBox();
             this.button_refresh = new System.Windows.Forms.Button();
-            this.checkBox_batch_load = new System.Windows.Forms.CheckBox();
+            this.button_config = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView_data
@@ -64,12 +60,13 @@
             this.columnHeader_name,
             this.columnHeader_type,
             this.columnHeader_size,
-            this.columnHeader_file_count});
+            this.columnHeader_file_count,
+            this.columnHeader_last_write_time});
             this.listView_data.FullRowSelect = true;
-            this.listView_data.Location = new System.Drawing.Point(40, 177);
+            this.listView_data.Location = new System.Drawing.Point(40, 159);
             this.listView_data.MultiSelect = false;
             this.listView_data.Name = "listView_data";
-            this.listView_data.Size = new System.Drawing.Size(700, 400);
+            this.listView_data.Size = new System.Drawing.Size(900, 420);
             this.listView_data.TabIndex = 0;
             this.listView_data.UseCompatibleStateImageBehavior = false;
             this.listView_data.View = System.Windows.Forms.View.Details;
@@ -98,6 +95,11 @@
             this.columnHeader_file_count.Text = "file count";
             this.columnHeader_file_count.Width = 100;
             // 
+            // columnHeader_last_write_time
+            // 
+            this.columnHeader_last_write_time.Text = "last write time";
+            this.columnHeader_last_write_time.Width = 200;
+            // 
             // label_path
             // 
             this.label_path.AutoSize = true;
@@ -109,9 +111,9 @@
             // 
             // textBox_path
             // 
-            this.textBox_path.Location = new System.Drawing.Point(91, 21);
+            this.textBox_path.Location = new System.Drawing.Point(108, 21);
             this.textBox_path.Name = "textBox_path";
-            this.textBox_path.Size = new System.Drawing.Size(335, 27);
+            this.textBox_path.Size = new System.Drawing.Size(318, 27);
             this.textBox_path.TabIndex = 2;
             // 
             // button_ok
@@ -124,17 +126,17 @@
             this.button_ok.UseVisualStyleBackColor = true;
             this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
             // 
-            // label_status
+            // label_alert
             // 
-            this.label_status.AutoSize = true;
-            this.label_status.Location = new System.Drawing.Point(538, 24);
-            this.label_status.Name = "label_status";
-            this.label_status.Size = new System.Drawing.Size(0, 20);
-            this.label_status.TabIndex = 4;
+            this.label_alert.AutoSize = true;
+            this.label_alert.Location = new System.Drawing.Point(538, 24);
+            this.label_alert.Name = "label_alert";
+            this.label_alert.Size = new System.Drawing.Size(0, 20);
+            this.label_alert.TabIndex = 4;
             // 
             // button_root
             // 
-            this.button_root.Location = new System.Drawing.Point(38, 107);
+            this.button_root.Location = new System.Drawing.Point(40, 97);
             this.button_root.Name = "button_root";
             this.button_root.Size = new System.Drawing.Size(94, 29);
             this.button_root.TabIndex = 5;
@@ -144,7 +146,7 @@
             // 
             // button_back
             // 
-            this.button_back.Location = new System.Drawing.Point(138, 107);
+            this.button_back.Location = new System.Drawing.Point(140, 97);
             this.button_back.Name = "button_back";
             this.button_back.Size = new System.Drawing.Size(94, 29);
             this.button_back.TabIndex = 6;
@@ -155,14 +157,14 @@
             // label_now_path
             // 
             this.label_now_path.AutoSize = true;
-            this.label_now_path.Location = new System.Drawing.Point(40, 146);
+            this.label_now_path.Location = new System.Drawing.Point(40, 130);
             this.label_now_path.Name = "label_now_path";
             this.label_now_path.Size = new System.Drawing.Size(0, 20);
             this.label_now_path.TabIndex = 7;
             // 
             // button_export
             // 
-            this.button_export.Location = new System.Drawing.Point(238, 107);
+            this.button_export.Location = new System.Drawing.Point(240, 97);
             this.button_export.Name = "button_export";
             this.button_export.Size = new System.Drawing.Size(94, 29);
             this.button_export.TabIndex = 8;
@@ -172,7 +174,7 @@
             // 
             // button_import
             // 
-            this.button_import.Location = new System.Drawing.Point(336, 107);
+            this.button_import.Location = new System.Drawing.Point(338, 97);
             this.button_import.Name = "button_import";
             this.button_import.Size = new System.Drawing.Size(94, 29);
             this.button_import.TabIndex = 9;
@@ -182,9 +184,9 @@
             // 
             // button_show_in_explorer
             // 
-            this.button_show_in_explorer.Location = new System.Drawing.Point(436, 107);
+            this.button_show_in_explorer.Location = new System.Drawing.Point(438, 97);
             this.button_show_in_explorer.Name = "button_show_in_explorer";
-            this.button_show_in_explorer.Size = new System.Drawing.Size(140, 29);
+            this.button_show_in_explorer.Size = new System.Drawing.Size(154, 29);
             this.button_show_in_explorer.TabIndex = 10;
             this.button_show_in_explorer.Text = "show in explorer";
             this.button_show_in_explorer.UseVisualStyleBackColor = true;
@@ -216,67 +218,9 @@
             this.textBox_search.Size = new System.Drawing.Size(318, 27);
             this.textBox_search.TabIndex = 12;
             // 
-            // checkBox_search_file
-            // 
-            this.checkBox_search_file.AutoSize = true;
-            this.checkBox_search_file.Checked = true;
-            this.checkBox_search_file.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_search_file.Location = new System.Drawing.Point(40, 81);
-            this.checkBox_search_file.Name = "checkBox_search_file";
-            this.checkBox_search_file.Size = new System.Drawing.Size(111, 24);
-            this.checkBox_search_file.TabIndex = 14;
-            this.checkBox_search_file.Text = "search files";
-            this.checkBox_search_file.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_search_folder
-            // 
-            this.checkBox_search_folder.AutoSize = true;
-            this.checkBox_search_folder.Checked = true;
-            this.checkBox_search_folder.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_search_folder.Location = new System.Drawing.Point(157, 81);
-            this.checkBox_search_folder.Name = "checkBox_search_folder";
-            this.checkBox_search_folder.Size = new System.Drawing.Size(133, 24);
-            this.checkBox_search_folder.TabIndex = 15;
-            this.checkBox_search_folder.Text = "search folders";
-            this.checkBox_search_folder.UseVisualStyleBackColor = true;
-            // 
-            // comboBox_search_rule
-            // 
-            this.comboBox_search_rule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_search_rule.FormattingEnabled = true;
-            this.comboBox_search_rule.Items.AddRange(new object[] {
-            "include",
-            "same",
-            "regular"});
-            this.comboBox_search_rule.Location = new System.Drawing.Point(638, 54);
-            this.comboBox_search_rule.Name = "comboBox_search_rule";
-            this.comboBox_search_rule.Size = new System.Drawing.Size(102, 28);
-            this.comboBox_search_rule.TabIndex = 16;
-            // 
-            // label_search_rule
-            // 
-            this.label_search_rule.AutoSize = true;
-            this.label_search_rule.Location = new System.Drawing.Point(538, 57);
-            this.label_search_rule.Name = "label_search_rule";
-            this.label_search_rule.Size = new System.Drawing.Size(94, 20);
-            this.label_search_rule.TabIndex = 17;
-            this.label_search_rule.Text = "Search rule:";
-            // 
-            // checkBox_recursive_search
-            // 
-            this.checkBox_recursive_search.AutoSize = true;
-            this.checkBox_recursive_search.Checked = true;
-            this.checkBox_recursive_search.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_recursive_search.Location = new System.Drawing.Point(296, 81);
-            this.checkBox_recursive_search.Name = "checkBox_recursive_search";
-            this.checkBox_recursive_search.Size = new System.Drawing.Size(148, 24);
-            this.checkBox_recursive_search.TabIndex = 18;
-            this.checkBox_recursive_search.Text = "recursive search";
-            this.checkBox_recursive_search.UseVisualStyleBackColor = true;
-            // 
             // button_refresh
             // 
-            this.button_refresh.Location = new System.Drawing.Point(582, 107);
+            this.button_refresh.Location = new System.Drawing.Point(598, 97);
             this.button_refresh.Name = "button_refresh";
             this.button_refresh.Size = new System.Drawing.Size(94, 29);
             this.button_refresh.TabIndex = 19;
@@ -284,30 +228,23 @@
             this.button_refresh.UseVisualStyleBackColor = true;
             this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
             // 
-            // checkBox_batch_load
+            // button_config
             // 
-            this.checkBox_batch_load.AutoSize = true;
-            this.checkBox_batch_load.Checked = true;
-            this.checkBox_batch_load.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_batch_load.Location = new System.Drawing.Point(450, 81);
-            this.checkBox_batch_load.Name = "checkBox_batch_load";
-            this.checkBox_batch_load.Size = new System.Drawing.Size(108, 24);
-            this.checkBox_batch_load.TabIndex = 20;
-            this.checkBox_batch_load.Text = "batch load";
-            this.checkBox_batch_load.UseVisualStyleBackColor = true;
+            this.button_config.Location = new System.Drawing.Point(538, 53);
+            this.button_config.Name = "button_config";
+            this.button_config.Size = new System.Drawing.Size(100, 29);
+            this.button_config.TabIndex = 21;
+            this.button_config.Text = "config";
+            this.button_config.UseVisualStyleBackColor = true;
+            this.button_config.Click += new System.EventHandler(this.button_config_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(782, 603);
-            this.Controls.Add(this.checkBox_batch_load);
+            this.ClientSize = new System.Drawing.Size(982, 603);
+            this.Controls.Add(this.button_config);
             this.Controls.Add(this.button_refresh);
-            this.Controls.Add(this.checkBox_recursive_search);
-            this.Controls.Add(this.label_search_rule);
-            this.Controls.Add(this.comboBox_search_rule);
-            this.Controls.Add(this.checkBox_search_folder);
-            this.Controls.Add(this.checkBox_search_file);
             this.Controls.Add(this.button_search);
             this.Controls.Add(this.label_search);
             this.Controls.Add(this.textBox_search);
@@ -317,7 +254,7 @@
             this.Controls.Add(this.label_now_path);
             this.Controls.Add(this.button_back);
             this.Controls.Add(this.button_root);
-            this.Controls.Add(this.label_status);
+            this.Controls.Add(this.label_alert);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.label_path);
             this.Controls.Add(this.listView_data);
@@ -339,7 +276,7 @@
         private Label label_path;
         private TextBox textBox_path;
         private Button button_ok;
-        private Label label_status;
+        private Label label_alert;
         private Button button_root;
         private Button button_back;
         private Label label_now_path;
@@ -349,12 +286,8 @@
         private Button button_search;
         private Label label_search;
         private TextBox textBox_search;
-        private CheckBox checkBox_search_file;
-        private CheckBox checkBox_search_folder;
-        private ComboBox comboBox_search_rule;
-        private Label label_search_rule;
-        private CheckBox checkBox_recursive_search;
         private Button button_refresh;
-        private CheckBox checkBox_batch_load;
+        private ColumnHeader columnHeader_last_write_time;
+        private Button button_config;
     }
 }

@@ -8,8 +8,8 @@ namespace GetFolderSize
 {
     /// <summary>
     /// 比较函数，用于排序
-    /// <para>2022.6.8</para>
-    /// <para>version 1.1.0</para>
+    /// <para>2023.12.13</para>
+    /// <para>version 1.4.0</para>
     /// </summary>
     internal class CompareFunctions
     {
@@ -124,6 +124,63 @@ namespace GetFolderSize
                 return 1;
             return f1.CompareTo(f2);
         }
+
+        /// <summary>
+        /// 以最后修改日期数升序排序，无日期的项排在有日期的文件项
+        /// <para>2023.12.13</para>
+        /// <para>version 1.4.0</para>
+        /// </summary>
+        /// <param name="f1"></param>
+        /// <param name="f2"></param>
+        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
+        public static int ByLastWriteTimeAsc(FolderOrFile f1, FolderOrFile f2)
+        {
+            if (f1.LastWriteTime == null && f2.LastWriteTime == null)
+            {
+                return 0;
+            }
+            else if (f1.LastWriteTime == null && f2.LastWriteTime != null)
+            {
+                return 1;
+            }
+            else if (f1.LastWriteTime != null && f2.LastWriteTime == null)
+            {
+                return -1;
+            }
+            else
+            {
+                return f1.LastWriteTime.Value.CompareTo(f2.LastWriteTime.Value);
+            }
+        }
+        /// <summary>
+        /// 以最后修改日期数降序排序，无日期的项排在有日期的文件项
+        /// <para>2023.12.13</para>
+        /// <para>version 1.4.0</para>
+        /// </summary>
+        /// <param name="f1"></param>
+        /// <param name="f2"></param>
+        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
+        public static int ByLastWriteTimeDesc(FolderOrFile f1, FolderOrFile f2)
+        {
+            if (f1.LastWriteTime == null && f2.LastWriteTime == null)
+            {
+                return 0;
+            }
+            else if (f1.LastWriteTime == null && f2.LastWriteTime != null)
+            {
+                return 1;
+            }
+            else if (f1.LastWriteTime != null && f2.LastWriteTime == null)
+            {
+                return -1;
+            }
+            else
+            {
+                return -f1.LastWriteTime.Value.CompareTo(f2.LastWriteTime.Value);
+            }
+
+        }
+
 
     }
 }
