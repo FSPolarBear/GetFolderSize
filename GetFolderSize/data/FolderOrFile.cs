@@ -9,8 +9,8 @@ namespace GetFolderSize
 
     /// <summary>
     /// 文件夹或文件。数据项，用于在列表中展示
-    /// <para>2023.12.20</para>
-    /// <para>version 1.4.0</para>
+    /// <para>2023.12.27</para>
+    /// <para>version 1.4.1</para>
     /// </summary>
     public class FolderOrFile : IComparable<FolderOrFile>
     {
@@ -372,8 +372,8 @@ namespace GetFolderSize
 
         /// <summary>
         /// 搜索此文件夹下名字匹配的文件或文件夹，并返回查找到的内容列表。用于递归
-        /// <para>2023.12.19</para>
-        /// <para>version 1.4.0</para>
+        /// <para>2023.12.27</para>
+        /// <para>version 1.4.1</para>
         /// </summary>
         /// <param name="str">搜索内容</param>
         /// <param name="searchRule">匹配方式。include：文件名包含搜索内容；same：文件名与搜索内容相同；regular：搜索内容为正则表达式，文件名匹配此正则表达式</param>
@@ -388,12 +388,13 @@ namespace GetFolderSize
         /// <param name="fileCountLowerLimit">文件夹中文件数量下限。为null则不设下限</param>
         /// <param name="fileCountUpperLimit">文件夹中文件数量上限。为null则不设上限</param>
         /// <returns>查找到的内容列表</returns>
-        private List<FolderOrFile> _Search(string str, SearchRules searchRule = SearchRules.Include, bool searchFile = true, bool searchFolder = true, bool recursiveSearch = true, bool caseSensitive = false, long? fileSizeLowerLimit = null, long? fileSizeUpperLimit = null, long? folderSizeLowerLimit = null, long? folderSizeUpperLimit = null, int? fileCountLowerLimit = null, int? fileCountUpperLimit = null)
+        private HashSet<FolderOrFile> _Search(string str, SearchRules searchRule = SearchRules.Include, bool searchFile = true, bool searchFolder = true, bool recursiveSearch = true, bool caseSensitive = false, long? fileSizeLowerLimit = null, long? fileSizeUpperLimit = null, long? folderSizeLowerLimit = null, long? folderSizeUpperLimit = null, int? fileCountLowerLimit = null, int? fileCountUpperLimit = null)
         {
             if (!this.IsFolder || this.Children == null)  // 仅对文件夹进行搜索。如果是文件则报错
                 throw new Exception("Search in a non-folder object.");
 
-            List<FolderOrFile> result = new List<FolderOrFile> ();
+            //List<FolderOrFile> result = new List<FolderOrFile> ();
+            HashSet<FolderOrFile> result = new HashSet<FolderOrFile>();
 
             if (!caseSensitive)
             {
@@ -437,7 +438,8 @@ namespace GetFolderSize
 
                 if (recursiveSearch && child.IsFolder)  // 递归查询
                 {
-                    result.AddRange(child._Search(str, searchRule, searchFile, searchFolder, recursiveSearch, caseSensitive, fileSizeLowerLimit, fileSizeUpperLimit, folderSizeLowerLimit, folderSizeUpperLimit, fileCountLowerLimit, fileCountUpperLimit));
+                    //result.AddRange(child._Search(str, searchRule, searchFile, searchFolder, recursiveSearch, caseSensitive, fileSizeLowerLimit, fileSizeUpperLimit, folderSizeLowerLimit, folderSizeUpperLimit, fileCountLowerLimit, fileCountUpperLimit));
+                    result.UnionWith(child._Search(str, searchRule, searchFile, searchFolder, recursiveSearch, caseSensitive, fileSizeLowerLimit, fileSizeUpperLimit, folderSizeLowerLimit, folderSizeUpperLimit, fileCountLowerLimit, fileCountUpperLimit));
                 }
             }
             return result;
@@ -446,8 +448,8 @@ namespace GetFolderSize
 
         /// <summary>
         /// 搜索此文件夹下名字匹配的文件或文件夹，并返回一个包含查找内容的文件夹对象
-        /// <para>2023.12.18</para>
-        /// <para>version 1.4.0</para>
+        /// <para>2023.12.27</para>
+        /// <para>version 1.4.1</para>
         /// </summary>
         /// <param name="str">搜索内容</param>
         /// <param name="searchRule">匹配方式。include：文件名包含搜索内容；same：文件名与搜索内容相同；regular：搜索内容为正则表达式，文件名匹配此正则表达式</param>
@@ -477,6 +479,7 @@ namespace GetFolderSize
             FolderOrFile root = new FolderOrFile();
             root.Children = new FolderOrFile[] {result};
             result.Parent = root;
+            root.IsFolder = true;//修复在root页面进行搜索时报错的bug
             return result;
         }
 
@@ -541,6 +544,32 @@ namespace GetFolderSize
             if (upperLimit != null && FileCount > upperLimit)
                 return false;
             return true;
+        }
+
+        /// <summary>
+        /// 全路径相同的两个对象视为相等
+        /// <para>2023.12.27</para>
+        /// <para>version 1.4.1</para>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            FolderOrFile? f = obj as FolderOrFile;
+            if (f == null)
+                return false;
+            return f.FullName == this.FullName;
+        }
+
+        /// <summary>
+        /// 重写Equals需重写GetHashCode
+        /// <para>2023.12.27</para>
+        /// <para>version 1.4.1</para>
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return FullName.GetHashCode();
         }
     }
 }

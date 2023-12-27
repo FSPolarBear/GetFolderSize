@@ -2,7 +2,7 @@
 Get the size of files and subfolders in a folder. The files and folders are sorted in descending order by file size by default.
 
 ## Version
-v1.4.0
+v1.4.1
 
 ## Environmental Requirements
 Windows7/10/11, .NET 6.0
@@ -69,6 +69,12 @@ The text for search is empty. Please input the text for search into "Search" tex
 
 
 ## Update log
+2023.12.27<br>
+v1.4.1<br>
+Now, a file or folder is displayed only once in a search, even if it is contained in multiple gotten folders.<br>
+We fixed a bug that the program crashed after searching, clicking "Back" button and searching again.
+
+
 2023.12.21<br>
 v1.4.0<br>
 We added Simplified Chinese UI and the function of language switch.<br>
@@ -80,9 +86,8 @@ We added the setting form, and moved the setting options to the setting form, an
 We updated the text.<br>
 We optimized the sort to solve the problem of stack overflow when sorting a large number of items.<br>
 We optimized the display of size. When the unit of size is "B", we use an integer instead of a decimal to indicate the size.<br>
-We fixed a bug that items of the old page may be loaded to the new page when change the page during batch loading.<br>
-We fixed a bug that a wrong path is shown when put the mouse over "Search result" item.<br>
-
+We fixed a bug that items of the old page might be loaded to the new page when change the page during batch loading.<br>
+We fixed a bug that a wrong path was shown when put the mouse over "Search result" item.<br>
 
 
 2023.12.13<br>
