@@ -8,8 +8,8 @@ namespace GetFolderSize
 {
     /// <summary>
     /// 简体中文本地化
-    /// <para>2023.12.20</para>
-    /// <para>version 1.4.0</para>
+    /// <para>2024.1.18</para>
+    /// <para>version 1.4.2</para>
     /// </summary>
     public class LocalizationZHS: Localization
     {
@@ -45,6 +45,7 @@ namespace GetFolderSize
             Main_Alert_ImportFailed = "导入失败";
             Main_Alert_SearchTextEmpty = "搜索内容为空";
             Main_Alert_TooManyItems = "项数太多无法排序";
+            Main_Alert_RegularExpressionIncorrect = "正则表达式不正确";
 
             Config_Title = "设置";
             Config_Label_Language = "语言:";

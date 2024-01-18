@@ -2,7 +2,7 @@
 Get the size of files and subfolders in a folder. The files and folders are sorted in descending order by file size by default.
 
 ## Version
-v1.4.1
+v1.4.2
 
 ## Environmental Requirements
 Windows7/10/11, .NET 6.0
@@ -65,10 +65,17 @@ Export failed. Get folder information before exporting.
 Import failed. The imported file may be in the wrong format
 ### The search text is empty
 The text for search is empty. Please input the text for search into "Search" text box before click "search" button.
+### The regular expression is incorrect
+The regular for search is incorrect。
 
 
 
 ## Update log
+2024.1.18<br>
+v1.4.2<br>
+We fixed a bug that the program crashed after searching with an incorrect regular expression.<br>
+
+
 2023.12.27<br>
 v1.4.1<br>
 Now, a file or folder is displayed only once in a search, even if it is contained in multiple gotten folders.<br>

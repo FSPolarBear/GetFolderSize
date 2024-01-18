@@ -11,8 +11,8 @@ namespace GetFolderSize
 
     /// <summary>
     /// 本地化信息父类。默认为英语
-    /// <para>2023.12.21</para>
-    /// <para>version 1.4.0</para>
+    /// <para>2024.1.18</para>
+    /// <para>version 1.4.2</para>
     /// </summary>
     public abstract class Localization
     {
@@ -56,6 +56,7 @@ namespace GetFolderSize
             Main_Alert_ImportFailed = "Import failed";
             Main_Alert_SearchTextEmpty = "The search text is empty";
             Main_Alert_TooManyItems = "Too many items to sort";
+            Main_Alert_RegularExpressionIncorrect = "The regular expression is incorrect";
 
             Config_Title = "Setting";
             Config_Label_Language = "Language:";
@@ -155,6 +156,7 @@ namespace GetFolderSize
         public string Main_ListViewColumn_Size { get; protected set; }
         public string Main_ListViewColumn_FileCount { get; protected set; }
         public string Main_ListViewColumn_LastWriteTime { get; protected set; }
+        public string Main_Alert_RegularExpressionIncorrect { get; protected set; }
 
         public string Main_Alert_Getting { get; protected set; }
         public string Main_Alert_Importing { get; protected set; }

@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace GetFolderSize
 {
     /// <summary>
     /// 查询文件夹中文件和子文件夹的大小，默认以大小的降序排列
-    /// <para>2023.12.21</para>
-    /// <para>version 1.4.0</para>
+    /// <para>2024.1.18</para>
+    /// <para>version 1.4.2</para>
     /// </summary>
     public partial class MainForm : Form
     {
@@ -654,8 +655,8 @@ namespace GetFolderSize
 
         /// <summary>
         /// 查找当前文件夹下符合条件的文件或文件夹
-        /// <para>2023.12.20</para>
-        /// <para>version 1.4.0</para>
+        /// <para>2024.1.18</para>
+        /// <para>version 1.4.2</para>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -665,6 +666,7 @@ namespace GetFolderSize
             if (now == null || now.Children == null || now.Children.Length == 0)
                 return;
             string str = textBox_search.Text;
+
             //string searchRule = SEARCH_RULES[comboBox_search_rule.SelectedIndex];
             SearchRules searchRule = Config.SearchRule;
             bool searchFile = Config.SearchFiles;
@@ -681,6 +683,19 @@ namespace GetFolderSize
             {
                 label_alert.Text = localization.Main_Alert_SearchTextEmpty;
                 return;
+            }
+
+            if (searchRule == SearchRules.Regular) // 若正则字符串不正确，给出提示并终止搜索
+            {
+                try
+                {
+                    Regex _ = new Regex(str);
+                }
+                catch (RegexParseException ex) 
+                {
+                    label_alert.Text = localization.Main_Alert_RegularExpressionIncorrect;
+                    return;
+                }
             }
 
             string json = new Newtonsoft.Json.Linq.JObject()

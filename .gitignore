@@ -1,0 +1,8 @@
+.vs
+TestResults
+GetFolderSize/bin
+GetFolderSize/obj
+GetFolderSizeTest/bin
+GetFolderSizeTest/obj
+desktop.ini
+*.bak
