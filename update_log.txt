@@ -1,5 +1,6 @@
 Update Log
 
+2024.6.30
 v2.0.0
 We added the function of updating data when folders or files change. when folders or files in the gotten or imported folder(s) are created, deleted, modified or renamed, the corresponding data in GetFolderSize will be updated. 
 We added the function of exporting the currently displayed folder.
