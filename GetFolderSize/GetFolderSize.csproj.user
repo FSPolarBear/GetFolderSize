@@ -4,6 +4,9 @@
     <Compile Update="ConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="data\FolderOrFileUpdater.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

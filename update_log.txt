@@ -1,0 +1,79 @@
+Update Log
+
+v2.0.0
+We added the function of updating data when folders or files change. when folders or files in the gotten or imported folder(s) are created, deleted, modified or renamed, the corresponding data in GetFolderSize will be updated. 
+We added the function of exporting the currently displayed folder.
+We added the function of choosing the folder to get by a folder browser dialog.
+We added the function of stopping getting, importing or searching
+We added the function of autostart.
+We added the function of minimizing the form instead of closing it when the main form is closed.
+We added the Exit button.
+We added the function of exporting data when the program is exited.
+We added the function of getting data when the program is started.
+We added the function of importing data when the program is started.
+We added the function of searching by wildcard.
+We added the function of searching by extension.
+We added the function of searching with combined criteria.
+We added the function of searching the root folder.
+We added the tray icon, the function of double-clicking the tray icon to switch to the from, and the Exit button at the right-button menu of the tray icon.
+We added the function of that only one GetFolderSize process is allowed to exist. When this function is enabled and a GetFolderSize process is existed and run GetFolderSize.exe again, it will switch to the existing GetFolderSize from, instead of start a new GetFolderSize progress.
+We added the function of importing and exporting setting.
+We added the function of applying the setting without closing the setting form.
+We changed the icon of program.
+We optimized some code.
+Now, the lower limit cannot be larger than the higher limit for file size limit, folder size limit and file count limit.
+Now, when loading an invalid setting item (e.g. batch size interval is -1ms), it will be set to the default value.
+Now, you can press Enter as Ok or press ESC as Cancel in the setting form.
+
+2024.1.18
+v1.4.2
+We fixed a bug that the program crashed after searching with an incorrect regular expression.
+
+2023.12.27
+v1.4.1
+Now, a file or folder is displayed only once in a search, even if it is contained in multiple gotten folders.
+We fixed a bug that the program crashed after searching, clicking "Back" button and searching again.
+
+2023.12.21
+v1.4.0
+We added Simplified Chinese UI and the function of language switch.
+We added the function of displaying the last write time of files and folders.
+We added the function of getting multiple folders once.
+We added the function of case-insensitive search.
+We added the options of file size, folder size and file count limits for search.
+We added the setting form, and moved the setting options to the setting form, and added more setting options.
+We updated the text.
+We optimized the sort to solve the problem of stack overflow when sorting a large number of items.
+We optimized the display of size. When the unit of size is "B", we use an integer instead of a decimal to indicate the size.
+We fixed a bug that items of the old page might be loaded to the new page when change the page during batch loading.
+We fixed a bug that a wrong path was shown when put the mouse over "Search result" item.
+
+2023.12.13
+v1.3.1
+We added the function of batch loading, in order to solve the problem that the problem may become unresponsive during loading a large number of items.
+We added the function of refreshing.
+We updated the alert text.
+
+2023.12.8
+v1.3.0
+We added the function of searching.
+We added the function of opening the current folder in explorer and select the chosen file or folder.
+We added the function of showing the full path when putting the mouse on a file or folder.
+We fixed some typographic and descriptive problems of readme.md.
+We added a readme.md in English.
+We removed compiled files from the source code.
+
+2022.6.10
+v1.2.0
+We added the functions of importing and exporting.
+We optimized the UI.
+
+2022.6.9
+v1.1.0
+We added the function of sorting by a column.
+We fixed a bug that when we tried to get a new folder but failed, it still showed the path of the old folder.
+We optimized the file structure.
+
+2022.6.8
+v1.0.0
+This is the first release of GetFolderSize.

@@ -8,16 +8,16 @@ namespace GetFolderSize
 {
     /// <summary>
     /// 比较函数，用于排序
-    /// <para>2023.12.13</para>
-    /// <para>version 1.4.0</para>
     /// </summary>
+    /// 2024.4.13
+    /// version 2.0.0
     internal class CompareFunctions
     {
         /// <summary>
         /// 以名字升序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
         /// </summary>
+        /// 2022.6.8
+        /// version 1.1.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
@@ -26,137 +26,82 @@ namespace GetFolderSize
             return f1.Name.CompareTo(f2.Name);
         }
 
-        /// <summary>
-        /// 以名字降序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
-        /// </summary>
-        /// <param name="f1"></param>
-        /// <param name="f2"></param>
-        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int ByNameDesc(FolderOrFile f1, FolderOrFile f2)
-        {
-            return -f1.Name.CompareTo(f2.Name);
-        }
 
         /// <summary>
         /// 以文件数升序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
         /// </summary>
+        /// 2024.4.13
+        /// version 2.0.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
         public static int ByFileCountAsc(FolderOrFile f1, FolderOrFile f2)
         {
-            return f1.FileCount.CompareTo(f2.FileCount);
+            int f1count, f2count;
+            if (f1 is Folder folder1)
+                f1count = folder1.FileCount;
+            else 
+                f1count = 1;
+            if (f2 is Folder folder2)
+                f2count = folder2.FileCount;
+            else
+                f2count = 1;
+            return f1count.CompareTo(f2count);
         }
 
         /// <summary>
         /// 以文件数降序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
         /// </summary>
+        /// 2024.4.13
+        /// version 2.0.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
         public static int ByFileCountDesc(FolderOrFile f1, FolderOrFile f2)
         {
-            return -f1.FileCount.CompareTo(f2.FileCount);
+            return -ByFileCountAsc(f1, f2);
         }
 
-        /// <summary>
-        /// 以大小升序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
-        /// </summary>
-        /// <param name="f1"></param>
-        /// <param name="f2"></param>
-        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int BySizeAsc(FolderOrFile f1, FolderOrFile f2)
-        {
-            return -f1.CompareTo(f2);//FolderOrFile的CompareTo是降序排序
-        }
-
-        /// <summary>
-        /// 以大小降序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
-        /// </summary>
-        /// <param name="f1"></param>
-        /// <param name="f2"></param>
-        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int BySizeDesc(FolderOrFile f1, FolderOrFile f2)
-        {
-            return f1.CompareTo(f2);//FolderOrFile的CompareTo是降序排序
-        }
 
         /// <summary>
         /// 优先文件夹。文件夹和文件各以大小降序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
         /// </summary>
+        /// 2024.4.13
+        /// version 2.0.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int ByIsFolderTrueFirst(FolderOrFile f1, FolderOrFile f2)
+        public static int ByFolderFirst(FolderOrFile f1, FolderOrFile f2)
         {
-            if(f1.IsFolder && !f2.IsFolder)
+            if(f1 is Folder && !(f2 is Folder))
                 return 1;
-            if (!f1.IsFolder && f2.IsFolder)
+            if (!(f1 is Folder) && f2 is Folder)
                 return -1;
             return f1.CompareTo(f2);
         }
 
         /// <summary>
         /// 优先文件。文件夹和文件各以大小降序排序
-        /// <para>2022.6.8</para>
-        /// <para>version 1.1.0</para>
         /// </summary>
+        /// 2024.4.13
+        /// version 2.0.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int ByIsFolderFalseFirst(FolderOrFile f1, FolderOrFile f2)
+        public static int ByFileFirst(FolderOrFile f1, FolderOrFile f2)
         {
-            if (f1.IsFolder && !f2.IsFolder)
+            if (f1 is Folder && !(f2 is Folder))
                 return -1;
-            if (!f1.IsFolder && f2.IsFolder)
+            if (!(f1 is Folder) && f2 is Folder)
                 return 1;
             return f1.CompareTo(f2);
         }
 
         /// <summary>
-        /// 以最后修改日期数升序排序，无日期的项排在有日期的文件项
-        /// <para>2023.12.13</para>
-        /// <para>version 1.4.0</para>
-        /// </summary>
-        /// <param name="f1"></param>
-        /// <param name="f2"></param>
-        /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
-        public static int ByLastWriteTimeAsc(FolderOrFile f1, FolderOrFile f2)
-        {
-            if (f1.LastWriteTime == null && f2.LastWriteTime == null)
-            {
-                return 0;
-            }
-            else if (f1.LastWriteTime == null && f2.LastWriteTime != null)
-            {
-                return 1;
-            }
-            else if (f1.LastWriteTime != null && f2.LastWriteTime == null)
-            {
-                return -1;
-            }
-            else
-            {
-                return f1.LastWriteTime.Value.CompareTo(f2.LastWriteTime.Value);
-            }
-        }
-        /// <summary>
         /// 以最后修改日期数降序排序，无日期的项排在有日期的文件项
-        /// <para>2023.12.13</para>
-        /// <para>version 1.4.0</para>
         /// </summary>
+        /// 2024.4.13
+        /// version 2.0.0
         /// <param name="f1"></param>
         /// <param name="f2"></param>
         /// <returns>负数为排名在前，正数为排名在后，0为相同</returns>
@@ -176,7 +121,7 @@ namespace GetFolderSize
             }
             else
             {
-                return -f1.LastWriteTime.Value.CompareTo(f2.LastWriteTime.Value);
+                return -f1.LastWriteTime!.Value.CompareTo(f2.LastWriteTime!.Value);
             }
 
         }

@@ -1,133 +1,136 @@
 
 using GetFolderSize;
-using Newtonsoft.Json.Linq;
-using System.Reflection;
+using Json;
 
 namespace GetFolderSizeTest
 {
     /// <summary>
-    /// ²âÊÔFolderOrFileÀà
-    /// <para>2023.12.18</para>
-    /// <para>version 1.4.0</para>
+    /// æµ‹è¯•FolderOrFileç±»
     /// </summary>
+    /// 2024.5.31
+    /// version 1.5.0
     [TestClass]
     public class FolderOrFileTest
     {
         /// <summary>
-        /// ²âÊÔFolderOrFileÀàµÄSearch·½·¨
-        /// Search: ËÑË÷´ËÎÄ¼ş¼ĞÏÂÃû×ÖÆ¥ÅäµÄÎÄ¼ş»òÎÄ¼ş¼Ğ£¬²¢·µ»ØÒ»¸ö°üº¬²éÕÒÄÚÈİµÄÎÄ¼ş¼Ğ¶ÔÏó
-        /// <para>2023.12.18</para>
-        /// <para>version 1.4.0</para>
+        /// æµ‹è¯•FolderOrFileç±»çš„Searchæ–¹æ³•
+        /// Search: æœç´¢æ­¤æ–‡ä»¶å¤¹ä¸‹åå­—åŒ¹é…çš„æ–‡ä»¶æˆ–æ–‡ä»¶å¤¹ï¼Œå¹¶è¿”å›ä¸€ä¸ªåŒ…å«æŸ¥æ‰¾å†…å®¹çš„æ–‡ä»¶å¤¹å¯¹è±¡
         /// </summary>
+        /// 2024.5.31
+        /// version 1.5.0
         [TestMethod]
         public void TestSearch()
         {
-            FolderOrFile root = FolderOrFile.GetObjectFromPath("../../../FolderForTest");
-    
+            Folder root = new Folder("../../../FolderForTest");
+            JsonObject args;
 
-            FolderOrFile sr1 = root.Search("file1", recursiveSearch: false); // ²âÊÔincludeËÑË÷¡£ÎÄ¼şÃû°üº¬ËÑË÷ÄÚÈİ
+
+            args = new JsonObject() { { "str", "file1" }, { "recursiveSearch", false } };
+            Folder sr1 = root.Search(new SearchArgs(args)); // æµ‹è¯•includeæœç´¢ã€‚æ–‡ä»¶ååŒ…å«æœç´¢å†…å®¹
             Assert.AreEqual(3, sr1.FileCount);
 
-            FolderOrFile sr2 = root.Search("file1", searchFile: true, searchFolder:false, recursiveSearch: false);  // ²âÊÔ½öËÑË÷ÎÄ¼ş
+            args = new JsonObject() { { "str", "file1" }, { "searchFile", true }, { "searchFolder", false }, { "recursiveSearch", false } };
+            Folder sr2 = root.Search(new SearchArgs(args)); // æµ‹è¯•ä»…æœç´¢æ–‡ä»¶
             Assert.AreEqual(2, sr2.FileCount);
 
-            FolderOrFile sr3 = root.Search("file1", searchFile: false, searchFolder:true, recursiveSearch: false);  // ²âÊÔ½öËÑË÷ÎÄ¼ş¼Ğ
+            args = new JsonObject() { { "str", "file1" }, { "searchFile", false }, { "searchFolder", true }, { "recursiveSearch", false } };
+            Folder sr3 = root.Search(new SearchArgs(args)); // æµ‹è¯•ä»…æœç´¢æ–‡ä»¶å¤¹
             Assert.AreEqual(1, sr3.FileCount);
 
             try
             {
-                FolderOrFile sr4 = root.Search("file1", searchFile: false, searchFolder: false, recursiveSearch: false);  // ²âÊÔ¼È²»ËÑË÷ÎÄ¼şÒ²²»ËÑË÷ÎÄ¼ş¼Ğ¡£Ó¦µ±Å×³öÒì³£¡£
+                args = new JsonObject() { { "str", "file1" }, { "searchFile", false }, { "searchFolder", false }, { "recursiveSearch", false } };
+                Folder sr4 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ—¢ä¸æœç´¢æ–‡ä»¶ä¹Ÿä¸æœç´¢æ–‡ä»¶å¤¹ã€‚åº”å½“æŠ›å‡ºå¼‚å¸¸ã€‚
                 Assert.Fail();
             }
             catch (Exception)
             {
 
             }
-            
-            FolderOrFile sr5 = root.Search("file1", recursiveSearch: true);  // ²âÊÔµİ¹éËÑË÷
+
+            args = new JsonObject() { { "str", "file1" },{ "recursiveSearch", true } };
+            Folder sr5 = root.Search(new SearchArgs(args)); // æµ‹è¯•é€’å½’æœç´¢
             Assert.AreEqual(6, sr5.FileCount);
 
-            FolderOrFile sr6 = root.Search("file", recursiveSearch: true);  // ²âÊÔµİ¹éËÑË÷
+            args = new JsonObject() { { "str", "file" }, { "recursiveSearch", true } };
+            Folder sr6 = root.Search(new SearchArgs(args)); // æµ‹è¯•é€’å½’æœç´¢
             Assert.AreEqual(8, sr6.FileCount);
 
-            FolderOrFile sr7 = root.Search("file1", SearchRules.Same, recursiveSearch: false);  // ²âÊÔsameËÑË÷
+            args = new JsonObject() { { "str", "file1" }, { "searchRule", (int)SearchRules.Same }, { "recursiveSearch", false } };
+            Folder sr7 = root.Search(new SearchArgs(args)); // æµ‹è¯•sameæœç´¢
             Assert.AreEqual(1, sr7.FileCount);
 
-            FolderOrFile sr8 = root.Search("file1.txt", SearchRules.Same, recursiveSearch: true);  // ²âÊÔsameËÑË÷¡£ÎÄ¼şÃûÓëËÑË÷ÄÚÈİÏàÍ¬
+            args = new JsonObject() { { "str", "file1.txt" }, { "searchRule", (int)SearchRules.Same }, { "recursiveSearch", true } };
+            Folder sr8 = root.Search(new SearchArgs(args)); // æµ‹è¯•sameæœç´¢ã€‚æ–‡ä»¶åä¸æœç´¢å†…å®¹ç›¸åŒ
             Assert.AreEqual(3, sr8.FileCount);
 
-            FolderOrFile sr9 = root.Search("file1.tx", SearchRules.Same);  // ²âÊÔÃ»ÓĞËÑË÷µ½½á¹ûµÄÇé¿ö
+            args = new JsonObject() { { "str", "file1.tx" }, { "searchRule", (int)SearchRules.Same } };
+            Folder sr9 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ²¡æœ‰æœç´¢åˆ°ç»“æœçš„æƒ…å†µ
             Assert.AreEqual(0, sr9.FileCount);
 
-            FolderOrFile sr10 = root.Search("\\.txt$", SearchRules.Regular, recursiveSearch: true);  // ²âÊÔregularËÑË÷¡£ÕıÔòËÑË÷
+            args = new JsonObject() { { "str", "\\.txt$" }, { "searchRule", (int)SearchRules.Regular }, { "recursiveSearch", true } };
+            Folder   sr10 = root.Search(new SearchArgs(args)); ;  // æµ‹è¯•regularæœç´¢ã€‚æ­£åˆ™æœç´¢
             Assert.AreEqual(4, sr10.FileCount);
 
-            FolderOrFile sr11 = root.Search("\\.txt$", SearchRules.Regular, recursiveSearch: true, searchFolder: false);  // ²âÊÔregularËÑË÷
+            args = new JsonObject() { { "str", "\\.txt$" }, { "searchRule", (int)SearchRules.Regular }, { "recursiveSearch", true } , { "searchFolder", false } };
+            Folder sr11 = root.Search(new SearchArgs(args));  // æµ‹è¯•regularæœç´¢
             Assert.AreEqual(3, sr11.FileCount);
 
-            FolderOrFile sr12 = root.Search("upper", caseSensitive: true, recursiveSearch: false); // ²âÊÔ´óĞ¡Ğ´Ãô¸Ğ
+            args = new JsonObject() { { "str", "upper" }, { "caseSensitive", true }, { "recursiveSearch", false }};
+            Folder sr12 = root.Search(new SearchArgs(args));// æµ‹è¯•å¤§å°å†™æ•æ„Ÿ
             Assert.AreEqual(1, sr12.FileCount);
 
-            FolderOrFile sr13 = root.Search("upper", caseSensitive: false, recursiveSearch: false); // ²âÊÔ´óĞ¡Ğ´Ãô¸Ğ
+            args = new JsonObject() { { "str", "upper" }, { "caseSensitive", false }, { "recursiveSearch", false }};
+            Folder sr13 = root.Search(new SearchArgs(args)); // æµ‹è¯•å¤§å°å†™æ•æ„Ÿ
             Assert.AreEqual(2, sr13.FileCount);
 
-            FolderOrFile sr14 = root.Search("upper", caseSensitive: true); // ²âÊÔ´óĞ¡Ğ´Ãô¸Ğ
+            args = new JsonObject() { { "str", "upper" }, { "caseSensitive", true }};
+            Folder   sr14 = root.Search(new SearchArgs(args)); // æµ‹è¯•å¤§å°å†™æ•æ„Ÿ
             Assert.AreEqual(2, sr14.FileCount);
 
-            FolderOrFile sr15 = root.Search("upper", caseSensitive: false); // ²âÊÔ´óĞ¡Ğ´Ãô¸Ğ
+            args = new JsonObject() { { "str", "upper" }, { "caseSensitive", false } };
+            Folder sr15 = root.Search(new SearchArgs(args)); // æµ‹è¯•å¤§å°å†™æ•æ„Ÿ
             Assert.AreEqual(4, sr15.FileCount);
 
-            FolderOrFile sr16 = root.Search(".*", SearchRules.Regular, fileSizeLowerLimit: 1L, searchFolder: false); // ²âÊÔÎÄ¼ş´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "fileSizeLowerLimit", 1L }, { "searchFolder", false } };
+            Folder sr16 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(3, sr16.FileCount);
 
-            FolderOrFile sr17 = root.Search(".*", SearchRules.Regular, fileSizeLowerLimit: 1L, fileSizeUpperLimit: 4096L , searchFolder: false); // ²âÊÔÎÄ¼ş´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "fileSizeLowerLimit", 1L }, { "fileSizeUpperLimit", 4096L }, { "searchFolder", false } };
+            Folder sr17 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(2, sr17.FileCount);
 
-            FolderOrFile sr18 = root.Search(".sizetest", fileSizeUpperLimit: 4096L, searchFolder: false); // ²âÊÔÎÄ¼ş´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".sizetest" }, { "fileSizeUpperLimit", 4096L }, { "searchFolder", false } };
+            Folder   sr18 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(2, sr18.FileCount);
 
-            FolderOrFile sr19 = root.Search(".*", SearchRules.Regular, folderSizeLowerLimit: 1L, searchFile: false); // ²âÊÔÎÄ¼ş¼Ğ´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "folderSizeLowerLimit", 1L }, { "searchFile", false } };
+            Folder sr19 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(2, sr19.FileCount);
 
-            FolderOrFile sr20 = root.Search(".*", SearchRules.Regular, folderSizeLowerLimit: 1L, folderSizeUpperLimit: 2049L, searchFile: false); // ²âÊÔÎÄ¼ş¼Ğ´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "folderSizeLowerLimit", 1L }, { "folderSizeUpperLimit", 4000L }, { "searchFile", false } };
+            Folder sr20 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(1, sr20.FileCount);
 
-            FolderOrFile sr21 = root.Search(".*", SearchRules.Regular, folderSizeLowerLimit: 4000L, searchFile: false); // ²âÊÔÎÄ¼ş¼Ğ´óĞ¡ÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "folderSizeLowerLimit", 4000L }, { "searchFile", false } };
+            Folder sr21 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹å¤§å°ä¸Šä¸‹é™
             Assert.AreEqual(1, sr21.FileCount);
 
-            FolderOrFile sr22 = root.Search(".*", SearchRules.Regular, fileCountUpperLimit: 0, searchFile: false); // ²âÊÔÎÄ¼ş¼ĞÎÄ¼şÊıÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "fileCountUpperLimit", 0 }, { "searchFile", false } };
+            Folder sr22 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹æ–‡ä»¶æ•°ä¸Šä¸‹é™
             Assert.AreEqual(1, sr22.FileCount);
 
-            FolderOrFile sr23 = root.Search(".*", SearchRules.Regular, fileCountLowerLimit: 1, fileCountUpperLimit: 2, searchFile: false); // ²âÊÔÎÄ¼ş¼ĞÎÄ¼şÊıÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "fileCountLowerLimit", 1 }, { "fileCountUpperLimit", 2 }, { "searchFile", false } };
+            Folder sr23 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹æ–‡ä»¶æ•°ä¸Šä¸‹é™
             Assert.AreEqual(1, sr23.FileCount);
 
-            FolderOrFile sr24 = root.Search(".*", SearchRules.Regular, fileCountLowerLimit: 3, searchFile: false); // ²âÊÔÎÄ¼ş¼ĞÎÄ¼şÊıÉÏÏÂÏŞ
+            args = new JsonObject() { { "str", ".*" }, { "searchRule", (int)SearchRules.Regular }, { "fileCountLowerLimit", 3 }, { "searchFile", false } };
+            Folder sr24 = root.Search(new SearchArgs(args)); // æµ‹è¯•æ–‡ä»¶å¤¹æ–‡ä»¶æ•°ä¸Šä¸‹é™
             Assert.AreEqual(2, sr24.FileCount);
 
 
         }
 
-
-        /// <summary>
-        /// ²âÊÔFolderOrFileÀàµÄRegexToLower·½·¨
-        /// RegexToLower: ½«ÕıÔò±í´ïÊ½×ª»¯ÎªĞ¡Ğ´
-        /// <para>2023.12.18</para>
-        /// <para>version 1.4.0</para>
-        /// </summary>
-        [TestMethod]
-        public void TestRegexToLower()
-        {
-            Type type = typeof(FolderOrFile);
-            MethodInfo method = type.GetMethod("RegexToLower", BindingFlags.Static | BindingFlags.NonPublic);
-
-            object[] para1 = { "abcA" };
-            string res1 = (string) method.Invoke(null, para1);
-            Assert.AreEqual("abca", res1);
-
-            object[] para2 = { "A\\BcDE\\fG\\HiJ" };
-            string res2 = (string)method.Invoke(null, para2);
-            Assert.AreEqual("a\\Bcde\\fg\\Hij", res2);
-        }
 
 
     }
