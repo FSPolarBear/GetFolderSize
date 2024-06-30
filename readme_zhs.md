@@ -1,7 +1,7 @@
 <div align="center">
 
 # GetFolderSize
-[English](readme.md)|[简体中文](readme_zh.md)
+[English](readme.md)|[简体中文](readme_zhs.md)
 
 获取文件夹中文件和子文件夹的大小，默认以大小的降序排列。
 </div>

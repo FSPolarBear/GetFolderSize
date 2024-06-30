@@ -1,7 +1,7 @@
 <div align="center">
 
 # GetFolderSize
-[English](readme.md)|[简体中文](readme_zh.md)
+[English](readme.md)|[简体中文](readme_zhs.md)
 
 Get the size of files and subfolders in a folder. The files and folders are sorted in descending order by file size by default.
 </div>
