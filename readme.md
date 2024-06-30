@@ -81,7 +81,7 @@ If true, the gotten (or imported) data will be exported to a json file when exit
 If true, it will get folder information by the path when starting the program.  
 
 #### Import data when start (Default: false, and Path is "ExportedData.json")
-If true, it will import folder information from a json filewhen starting the program.  
+If true, it will import folder information from a json file when starting the program.  
 If both "Get data when start" and "Import data when start" are true, it will import when starting the program if the json file to import is existing; otherwise it will get when starting the program.   
 
 ### Batch loading:  

@@ -21,7 +21,7 @@ namespace GetFolderSize
         /// <returns></returns>
         public static JsonObject UpdateImportedData(JsonObject json)
         {
-            return UpdateImportedDataTo1_5_0(json);
+            return UpdateImportedDataTo2_0_0(json);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace GetFolderSize
             string? version = json.Get<string?>("Version", null);
             if (CompareVersionUtil.isLowerVersion(version, target_version))
             {
-                _UpdateImportedDataTo1_5_0(json);
+                _UpdateImportedDataTo2_0_0(json);
                 json["Version"] = target_version;  
             }
             return json;
